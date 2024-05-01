@@ -1,0 +1,26 @@
+{
+  "name": "turbotrace-console",
+  "version": "0.1.0",
+  "description": "",
+  "keywords": [],
+  "bugs": "https://github.com/yaroslav-korotaev/turbotrace-console/issues",
+  "license": "MIT",
+  "author": "Yaroslav Korotaev <yaroslav.korotaev@gmail.com>",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "repository": "yaroslav-korotaev/turbotrace-console",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "typescript": "^5.4.5"
+  }
+}
