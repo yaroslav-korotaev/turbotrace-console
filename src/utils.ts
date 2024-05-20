@@ -13,3 +13,15 @@ export function join(a: string | undefined, b: string | undefined): string | und
   
   return `${a} ${b}`;
 }
+
+export function name(s: string): string {
+  if (s == '') {
+    return '.';
+  }
+  
+  return s;
+}
+
+export function depth(n: number): number {
+  return Math.max(0, n - 1);
+}

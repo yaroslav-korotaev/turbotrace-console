@@ -1,7 +1,7 @@
 import util from 'node:util';
 import chalk from 'chalk';
 import { type SpanObject, type Backend } from './types';
-import { indent, join } from './utils';
+import { indent, join, name, depth } from './utils';
 
 export function createConsoleBackend(): Backend {
   let last: SpanObject | null = null;
@@ -11,8 +11,15 @@ export function createConsoleBackend(): Backend {
       return Date.now();
     },
     enter(span) {
-      let s = chalk.gray(`${span.name} {`);
-      s = indent(s, span.depth);
+      let s = name(span.name);
+      
+      if (span.parent && span.parent != last) {
+        s = `${s} @ ${name(span.parent.name)}`;
+      }
+      
+      s = chalk.gray(`${s} {`);
+      
+      s = indent(s, depth(span.depth));
       
       console.log(s);
       
@@ -22,10 +29,10 @@ export function createConsoleBackend(): Backend {
       let s = chalk.gray('}');
       
       if (span != last) {
-        s = `${s} ${chalk.gray(`@ ${span.name}`)}`;
+        s = `${s} ${chalk.gray(`@ ${name(span.name)}`)}`;
       }
       
-      s = indent(s, span.depth);
+      s = indent(s, depth(span.depth));
       
       console.log(s);
       
@@ -46,14 +53,14 @@ export function createConsoleBackend(): Backend {
       }
       
       if (span != last) {
-        s = `${s} ${chalk.gray(`@ ${span.name}`)}`;
+        s = `${s} ${chalk.gray(`@ ${name(span.name)}`)}`;
       }
       
       if (origin != span.origin) {
-        s = `${s} ${chalk.gray(`from ${origin.name}`)}`;
+        s = `${s} ${chalk.gray(`from ${name(origin.name)}`)}`;
       }
       
-      s = indent(s, span.depth + 1);
+      s = indent(s, depth(span.depth + 1));
       
       console.log(s);
       
