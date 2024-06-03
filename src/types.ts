@@ -1,5 +1,5 @@
 export type TracingObject = {
-  name: string;
+  tag: string;
 };
 
 export type SpanObject = {
@@ -9,6 +9,10 @@ export type SpanObject = {
   depth: number;
   start: number;
   stop: number;
+};
+
+export type Stream = {
+  write(line: string): void;
 };
 
 export type Backend = {
