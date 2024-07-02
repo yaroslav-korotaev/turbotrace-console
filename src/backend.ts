@@ -5,6 +5,16 @@ import { indent, join, errorMessage, name, depth } from './utils';
 
 export function createBackend(stream: Stream): Backend {
   let last: SpanObject | null = null;
+  let timestamp = Date.now();
+  
+  const write = (s: string) => {
+    const now = Date.now();
+    const elapsed = now - timestamp;
+    const e = chalk.gray(`+${elapsed}ms`);
+    
+    stream.write(`${s} ${e}\n`);
+    timestamp = now;
+  };
   
   return {
     now() {
@@ -21,12 +31,12 @@ export function createBackend(stream: Stream): Backend {
       
       s = indent(s, depth(span.depth));
       
-      stream.write(s + '\n');
+      write(s);
       
       last = span;
     },
     exit(span, err) {
-      let s = chalk.gray('}');
+      let s = chalk.gray(`} =${span.stop - span.start}ms`);
       
       if (span != last) {
         s = `${s} ${chalk.gray(`@ ${name(span.name)}`)}`;
@@ -38,7 +48,7 @@ export function createBackend(stream: Stream): Backend {
       
       s = indent(s, depth(span.depth));
       
-      stream.write(s + '\n');
+      write(s);
       
       last = span.parent;
     },
@@ -66,7 +76,7 @@ export function createBackend(stream: Stream): Backend {
       
       s = indent(s, depth(span.depth + 1));
       
-      stream.write(s + '\n');
+      write(s);
       
       last = span;
     },
